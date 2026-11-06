@@ -1,0 +1,4 @@
+# Site statique : aucune compilation, les fichiers à la racine sont publiés tels quels.
+[build]
+  publish = "."
+  command = ""

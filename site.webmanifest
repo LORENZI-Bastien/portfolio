@@ -1,0 +1,13 @@
+{
+  "name": "Bastien Lorenzi · Portfolio",
+  "short_name": "B. Lorenzi",
+  "lang": "fr",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0e0b16",
+  "theme_color": "#0e0b16",
+  "icons": [
+    { "src": "/images/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

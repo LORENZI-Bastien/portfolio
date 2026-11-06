@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://wonderful-chebakia-f83e9d.netlify.app/sitemap.xml

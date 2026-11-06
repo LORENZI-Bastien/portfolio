@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bastien Lorenzi · Portfolio réseaux, télécoms et cybersécurité</title>
+  <meta name="description" content="Bastien Lorenzi, étudiant en 3e année de BUT Réseaux et Télécommunications (parcours cybersécurité) à Montbéliard et technicien en alternance chez Scutum.">
+  <meta name="author" content="Bastien Lorenzi">
+  <link rel="canonical" href="https://wonderful-chebakia-f83e9d.netlify.app/">
+  <meta name="theme-color" content="#0e0b16" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f7f5fc" media="(prefers-color-scheme: light)">
+  <meta name="color-scheme" content="dark light">
+
+  <meta property="og:type" content="profile">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:site_name" content="Bastien Lorenzi">
+  <meta property="og:title" content="Bastien Lorenzi · Portfolio réseaux et cybersécurité">
+  <meta property="og:description" content="Étudiant en BUT Réseaux et Télécommunications, parcours cybersécurité, et technicien en alternance chez Scutum.">
+  <meta property="og:url" content="https://wonderful-chebakia-f83e9d.netlify.app/">
+  <meta property="og:image" content="https://wonderful-chebakia-f83e9d.netlify.app/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Bastien Lorenzi, portfolio réseaux et cybersécurité">
+  <meta property="profile:first_name" content="Bastien">
+  <meta property="profile:last_name" content="Lorenzi">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+
+  <link rel="preload" href="fonts/inter-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/inter-display-bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme.js"></script>
+  <script src="js/main.js" defer></script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Bastien Lorenzi",
+    "url": "https://wonderful-chebakia-f83e9d.netlify.app/",
+    "image": "https://wonderful-chebakia-f83e9d.netlify.app/images/og-image.jpg",
+    "jobTitle": "Technicien en alternance",
+    "worksFor": { "@type": "Organization", "name": "Scutum", "url": "https://www.scutum-group.com/" },
+    "alumniOf": { "@type": "CollegeOrUniversity", "name": "BUT Réseaux et Télécommunications, Montbéliard" },
+    "address": { "@type": "PostalAddress", "addressLocality": "Montbéliard", "addressCountry": "FR" },
+    "knowsAbout": ["Réseaux informatiques", "Télécommunications", "Cybersécurité", "Vidéosurveillance", "Contrôle d'accès", "Linux", "Stormshield", "Pentesting"],
+    "email": "mailto:bastienlorenzi70@gmail.com",
+    "sameAs": ["https://github.com/LORENZI-Bastien"]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+  <header class="site-header" id="haut">
+    <div class="container header-inner">
+      <a class="logo" href="#accueil" aria-label="Bastien Lorenzi, retour à l’accueil">BL<span aria-hidden="true">.</span></a>
+
+      <nav class="site-nav" id="menu" aria-label="Navigation principale">
+        <ul>
+          <li><a href="#parcours">Parcours</a></li>
+          <li><a href="#competences">Compétences</a></li>
+          <li><a href="#projets">Projets</a></li>
+          <li><a href="#passions">Passions</a></li>
+          <li><a href="#contact" class="nav-cta">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-tools">
+        <button class="icon-btn theme-toggle" type="button" aria-label="Activer le thème clair" hidden>
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v3M12 19.5v3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M1.5 12h3M19.5 12h3M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1Z"/></svg>
+        </button>
+        <button class="icon-btn menu-toggle" type="button" aria-controls="menu" aria-expanded="false" hidden>
+          <span class="sr-only">Menu</span>
+          <span class="burger" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenu">
+    <!-- ACCUEIL -->
+    <section class="hero" id="accueil" aria-labelledby="titre-accueil">
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <p class="status"><span class="dot" aria-hidden="true"></span> Technicien en alternance chez Scutum</p>
+          <h1 id="titre-accueil">Bastien <span class="accent">Lorenzi</span></h1>
+          <p class="hero-role">Réseaux, télécoms &amp; cybersécurité</p>
+          <p class="hero-lead">
+            Étudiant en <strong>3<sup>e</sup> année de BUT Réseaux et Télécommunications</strong> à Montbéliard,
+            en <strong>parcours cybersécurité</strong>. Alternant chez <strong>Scutum</strong>, à Rixheim,
+            où j’interviens chez les clients pour installer, configurer et dépanner leurs systèmes de sécurité.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#projets">Voir mes projets</a>
+            <a class="btn btn-ghost" href="#contact">Me contacter</a>
+          </div>
+          <ul class="hero-facts" aria-label="En bref">
+            <li><strong>11</strong><span>projets SAÉ</span></li>
+            <li><strong>BUT 3</strong><span>Réseaux &amp; Télécoms</span></li>
+            <li><strong>Cyber</strong><span>parcours</span></li>
+          </ul>
+        </div>
+
+        <div class="hero-visual">
+          <svg class="network" viewBox="0 0 440 440" role="img" aria-labelledby="reseau-titre reseau-desc">
+            <title id="reseau-titre">Un parcours entre formation et entreprise</title>
+            <desc id="reseau-desc">Bastien Lorenzi au centre d’un réseau reliant sa formation BUT R&amp;T à Montbéliard, la cybersécurité et son alternance chez Scutum à Rixheim.</desc>
+            <circle class="ring ring-outer" cx="220" cy="220" r="170"/>
+            <circle class="ring" cx="220" cy="220" r="115"/>
+            <g class="links">
+              <path d="M220 220 78 106"/><path d="M220 220 362 106"/><path d="M220 220 368 300"/><path d="M220 220 72 318"/><path d="M220 220 220 48"/>
+            </g>
+            <g class="packets" aria-hidden="true">
+              <circle r="4"><animateMotion dur="3.2s" repeatCount="indefinite" path="M78 106 220 220"/></circle>
+              <circle r="4"><animateMotion dur="2.6s" repeatCount="indefinite" path="M220 220 362 106"/></circle>
+              <circle r="4"><animateMotion dur="3.8s" repeatCount="indefinite" path="M368 300 220 220"/></circle>
+              <circle r="4"><animateMotion dur="3s" repeatCount="indefinite" path="M220 220 72 318"/></circle>
+              <circle r="4"><animateMotion dur="2.4s" repeatCount="indefinite" path="M220 48 220 220"/></circle>
+            </g>
+            <circle class="core-halo" cx="220" cy="220" r="78"/>
+            <circle class="core" cx="220" cy="220" r="64"/>
+            <text class="core-title" x="220" y="228" text-anchor="middle">BL.</text>
+            <text class="core-sub" x="220" y="252" text-anchor="middle">RÉSEAUX &amp; TÉLÉCOMS</text>
+            <g class="nodes">
+              <circle cx="78" cy="106" r="9"/><circle cx="362" cy="106" r="9"/><circle cx="368" cy="300" r="9"/><circle cx="72" cy="318" r="9"/><circle cx="220" cy="48" r="9"/>
+            </g>
+            <g class="labels">
+              <text x="78" y="80" text-anchor="middle">Montbéliard</text>
+              <text x="362" y="80" text-anchor="middle">Scutum</text>
+              <text x="368" y="334" text-anchor="middle">Rixheim</text>
+              <text x="72" y="352" text-anchor="middle">BUT R&amp;T</text>
+              <text x="220" y="24" text-anchor="middle">Cybersécurité</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- PARCOURS -->
+    <section class="section" id="parcours" aria-labelledby="titre-parcours">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="eyebrow"><span>01</span> Parcours</p>
+          <h2 id="titre-parcours">Entre formation et terrain</h2>
+          <p class="section-intro">Je partage mon temps entre ma formation à Montbéliard et Scutum. L’alternance me permet d’appliquer directement, chez les clients, ce que j’apprends en cours.</p>
+        </header>
+
+        <div class="journey">
+          <article class="card journey-card reveal">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M2 9 12 4l10 5-10 5L2 9Z"/><path d="M6 11v5c3 2.5 9 2.5 12 0v-5"/></svg>
+            </div>
+            <p class="card-kicker">Formation</p>
+            <h3>BUT Réseaux et Télécommunications</h3>
+            <p class="card-meta">Montbéliard · 3<sup>e</sup> année · parcours cybersécurité</p>
+            <p>Réseaux, télécommunications, systèmes et sécurité : chaque semestre est rythmé par des SAÉ, des projets concrets réalisés en équipe ou en autonomie.</p>
+          </article>
+
+          <article class="card journey-card reveal">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
+            <p class="card-kicker">Alternance</p>
+            <h3>Technicien chez Scutum</h3>
+            <p class="card-meta">Rixheim · Alsace</p>
+            <p>Scutum propose des solutions de sécurité : vidéosurveillance, contrôle d’accès, anti-intrusion, sécurité incendie et télésurveillance.</p>
+            <h4>Mes missions</h4>
+            <ul class="check-list">
+              <li>Service après-vente (SAV)</li>
+              <li>Installation de matériel</li>
+              <li>Configuration du système</li>
+              <li>Formation du client</li>
+            </ul>
+            <a class="text-link" href="https://www.scutum-group.com/fr/protection-des-infrastructures" target="_blank" rel="noopener noreferrer">Les activités de Scutum<span class="sr-only"> (nouvel onglet)</span> <span aria-hidden="true">↗</span></a>
+          </article>
+
+          <article class="card journey-card journey-goal reveal">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>
+            </div>
+            <p class="card-kicker">Après le BUT</p>
+            <h3>Devenir technicien</h3>
+            <p>Après le BUT, je souhaite entrer dans la vie active et exercer le métier de technicien. Mon alternance m’a confirmé que j’apprécie le travail sur le terrain et le contact avec les clients.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPÉTENCES -->
+    <section class="section section-alt" id="competences" aria-labelledby="titre-competences">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="eyebrow"><span>02</span> Compétences</p>
+          <h2 id="titre-competences">Ce que je sais faire</h2>
+          <p class="section-intro">Les outils et notions que j’ai pratiqués pendant mes projets de BUT et en entreprise.</p>
+        </header>
+
+        <div class="skills">
+          <article class="skill-group reveal">
+            <h3>Réseaux</h3>
+            <ul class="chips">
+              <li>Adressage IP</li><li>VLAN</li><li>DHCP</li><li>SSH</li><li>NFS / Samba</li><li>Wireshark</li><li>Cisco</li>
+            </ul>
+          </article>
+          <article class="skill-group reveal">
+            <h3>Cybersécurité</h3>
+            <ul class="chips">
+              <li>Stormshield</li><li>NAT / filtrage</li><li>Snort</li><li>Kali Linux</li><li>Nmap</li><li>Nessus</li><li>Metasploit</li><li>Burp Suite</li><li>Analyse de journaux</li>
+            </ul>
+          </article>
+          <article class="skill-group reveal">
+            <h3>Télécoms</h3>
+            <ul class="chips">
+              <li>Wi-Fi</li><li>Antennes</li><li>VoIP</li><li>FreePBX</li><li>Linphone</li><li>GNU Radio</li>
+            </ul>
+          </article>
+          <article class="skill-group reveal">
+            <h3>Systèmes &amp; développement</h3>
+            <ul class="chips">
+              <li>Linux</li><li>Raspberry Pi</li><li>Python / Flask</li><li>SQLite</li><li>Arduino / C++</li><li>HTML / CSS</li>
+            </ul>
+          </article>
+          <article class="skill-group skill-field reveal">
+            <h3>Sur le terrain</h3>
+            <ul class="chips">
+              <li>Vidéosurveillance</li><li>Contrôle d’accès</li><li>Anti-intrusion</li><li>Installation</li><li>Dépannage / SAV</li><li>Formation client</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJETS -->
+    <section class="section" id="projets" aria-labelledby="titre-projets">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="eyebrow"><span>03</span> Projets</p>
+          <h2 id="titre-projets">Des projets concrets</h2>
+          <p class="section-intro">Mes SAÉ de BUT, avec pour chacune le rapport et les livrables sur GitHub.</p>
+        </header>
+
+        <div class="filters" role="group" aria-label="Filtrer les projets" hidden>
+          <button type="button" class="filter is-active" data-filter="all" aria-pressed="true">Tous</button>
+          <button type="button" class="filter" data-filter="reseau" aria-pressed="false">Réseaux</button>
+          <button type="button" class="filter" data-filter="cyber" aria-pressed="false">Cybersécurité</button>
+          <button type="button" class="filter" data-filter="telecom" aria-pressed="false">Télécoms</button>
+          <button type="button" class="filter" data-filter="dev" aria-pressed="false">Développement</button>
+        </div>
+        <p class="sr-only" aria-live="polite" id="filter-status"></p>
+
+        <ul class="projects" id="liste-projets">
+          <li class="project reveal" data-cat="cyber">
+            <article class="card project-card">
+              <p class="project-code">SAÉ 4.Cyber.01 <span>2<sup>e</sup> année</span></p>
+              <h3>Sécuriser un système d’information</h3>
+              <p>Déploiement d’une infrastructure de laboratoire avec pare-feu, DMZ, services sécurisés et détection d’intrusions.</p>
+              <ul class="chips chips-sm" aria-label="Outils"><li>Stormshield</li><li>NAT / Filtrage</li><li>Snort</li><li>Sécurité réseau</li></ul>
+              <details>
+                <summary>Travaux et bilan</summary>
+                <div class="details-body">
+                  <p>Configuration des pare-feu et des services HTTP/HTTPS et FTP/FTPS, détection d’intrusions, scans de vulnérabilités et exercices de sécurité Wi-Fi et Man-in-the-Middle dans un environnement de test.</p>
+                  <p>Le projet comprend aussi une étude de l’authentification par certificat et du SSO. La supervision et les VPN SSL/IPsec sont restés partiellement réalisés.</p>
+                </div>
+              </details>
+              <a class="repo-link" href="https://github.com/LORENZI-Bastien/SAE-4.Cyber.01-Securiser-SI" target="_blank" rel="noopener noreferrer">Voir sur GitHub<span class="sr-only"> : Sécuriser un système d’information (nouvel onglet)</span></a>
+            </article>
+          </li>
+
+          <li class="project reveal" data-cat="cyber">
+            <article class="card project-card">
+              <p class="project-code">SAÉ 3.04 <span>2<sup>e</sup> année</span></p>
+              <h3>Découvrir le pentesting</h3>
+              <p>Des défis de cybersécurité pour analyser des traces d’attaque et comprendre des vulnérabilités.</p>
+              <ul class="chips chips-sm" aria-label="Outils"><li>Root-Me</li><li>Burp Suite</li><li>Analyse de journaux</li></ul>
+              <details>
+                <summary>Travaux et livrables</summary>
+                <div class="details-body">
+                  <p>Pour cette SAÉ, j’ai réalisé des challenges et rédigé un compte rendu de dix d’entre eux. C’était ma première expérience sur Root-Me.</p>
+                  <h4>Analyse de journaux</h4>
+                  <p>Journaux Windows EVTX, Syslog Linux et logs Nginx : repérer des événements suspects et reconstituer les actions observées.</p>
+                  <h4>Vulnérabilités</h4>
+                  <p>Recherche autour des référentiels CWE, CVE, CPE, CVSS et MITRE ATT&amp;CK.</p>
+                  <h4>Mise en pratique</h4>
+                  <p>Déchiffrement avec Gpg4win et manipulation de requêtes HTTP avec Burp Suite dans un challenge Root-Me.</p>
+                  <p>Pour chaque défi, j’ai décrit l’objectif, la méthode, les résultats et les notions utilisées. Le projet comprend un rapport et des vidéos de présentation.</p>
+                </div>
+              </details>
+              <a class="repo-link" href="https://github.com/LORENZI-Bastien/SAE-3.04-Pentesting" target="_blank" rel="noopener noreferrer">Voir sur GitHub<span class="sr-only"> : Découvrir le pentesting (nouvel onglet)</span></a>
+            </article>
+          </li>
+
+          <li class="project reveal" data-cat="cyber reseau">
+            <article class="card project-card">
+              <p class="project-code">SAÉ 2.4 <span>1<sup>re</sup> année</span></p>
+              <h3>Auditer un environnement de test</h3>
+              <p>Projet intégratif de cybersécurité sur un réseau de laboratoire et des applications volontairement vulnérables.</p>
+              <ul class="chips chips-sm" aria-label="Outils"><li>Kali Linux</li><li>Nmap / Nessus</li><li>Metasploit</li><li>DVWA</li></ul>
+              <details>
+                <summary>Travaux réalisés</summary>
+                <div class="details-body">
+                  <p>Cartographie des services, recherche de vulnérabilités et exercices d’analyse réseau et de sécurité web. Certaines tentatives d’exploitation n’ont pas abouti, comme indiqué dans les comptes rendus.</p>
+                </div>
+              </details>
+              <a class="repo-link" href="https://github.com/LORENZI-Bastien/SAE-2.4-Projet-integratif" target="_blank" rel="noopener noreferrer">Voir sur GitHub<span class="sr-only"> : Auditer un environnement de test (nouvel onglet)</span></a>
+            </article>
+          </li>
+
+          <li class="project reveal" data-cat="dev">
+            <article class="card project-card">
+              <p class="project-code">SAÉ 2.3 <span>1<sup>re</sup> année</span></p>
+              <h3>Le ventilomètre</h3>
+              <p>Application web permettant de consulter les données de vent associées aux villes de résidence et l’historique des recherches.</p>
+              <ul class="chips chips-sm" aria-label="Outils"><li>Python / Flask</li><li>SQLite</li><li>API météo</li></ul>
+              <details>
+                <summary>Travaux réalisés</summary>
+                <div class="details-body">
+                  <p>Collecte des données météo, import de données, recherche dans l’interface et calcul du vent médian collectif.</p>
+                </div>
+              </details>
+              <a class="repo-link" href="https://github.com/LORENZI-Bastien/SAE-2.3-Ventilometre" target="_blank" rel="noopener noreferrer">Voir sur GitHub<span class="sr-only"> : Le ventilomètre (nouvel onglet)</span></a>
+            </article>
+          </li>
+
+          <li class="project reveal" data-cat="telecom">
+            <article class="card project-card">
+              <p class="project-code">SAÉ 2.2 <span>1<sup>re</sup> année</span></p>
+              <h3>Mesurer un signal en téléphonie VoIP</h3>
+              <p>Caractérisation du son numérisé et comparaison des paramètres de codecs dans un environnement VoIP.</p>
+              <ul class="chips chips-sm" aria-label="Outils"><li>FreePBX</li><li>Linphone</li><li>GNU Radio</li></ul>
+              <details>
+                <summary>Contenu du projet</summary>
+                <div class="details-body">
+                  <p>Configuration d’un environnement VoIP, étude de la latence, de l’échantillonnage, de la bande passante et du rapport signal/bruit. Le rapport présente également une comparaison de la qualité d’écoute.</p>
+                </div>
+              </details>
+              <a class="repo-link" href="https://github.com/LORENZI-Bastien/SAE-2.2-Mesure-de-signaux" target="_blank" rel="noopener noreferrer">Voir sur GitHub<span class="sr-only"> : Mesurer un signal en téléphonie VoIP (nouvel onglet)</span></a>
+            </article>
+          </li>
+
+          <li class="project reveal" data-cat="reseau">
+            <article class="card project-card">
+              <p class="project-code">SAÉ 2.1 <span>1<sup>re</sup> année</span></p>
+              <h3>Construire un réseau pour une petite structure</h3>
+              <p>Adressage, services réseau et configuration des équipements pour une infrastructure de petite structure.</p>
+              <ul class="chips chips-sm" aria-label="Outils"><li>DHCP</li><li>VLAN</li><li>SSH</li><li>Linux</li></ul>
+              <details>
+                <summary>Travaux réalisés</summary>
+                <div class="details-body">
+                  <p>Plan d’adressage, simulation DHCP, services de déploiement et de partage, segmentation VLAN et vérifications des configurations.</p>
+                </div>
+              </details>
+              <a class="repo-link" href="https://github.com/LORENZI-Bastien/SAE-2.1-Infrastructure-reseau" target="_blank" rel="noopener noreferrer">Voir sur GitHub<span class="sr-only"> : Construire un réseau pour une petite structure (nouvel onglet)</span></a>
+            </article>
+          </li>
+
+          <li class="project reveal" data-cat="dev">
+            <article class="card project-card">
+              <p class="project-code">SAÉ 1.5 <span>1<sup>re</sup> année</span></p>
+              <h3>Programmer un robot suiveur de ligne</h3>
+              <p>Programmation d’un robot pour parcourir un circuit en huit, compter les tours et les signaler par des LED.</p>
+              <ul class="chips chips-sm" aria-label="Outils"><li>Arduino</li><li>C++</li><li>Capteurs infrarouges</li></ul>
+              <details>
+                <summary>Travaux réalisés</summary>
+                <div class="details-body">
+                  <p>Lecture des capteurs, commande des moteurs et changement de couleur des LED selon l’avancement du parcours.</p>
+                </div>
+              </details>
+              <a class="repo-link" href="https://github.com/LORENZI-Bastien/SAE-1.5-Robot-suiveur-de-ligne" target="_blank" rel="noopener noreferrer">Voir sur GitHub<span class="sr-only"> : Programmer un robot suiveur de ligne (nouvel onglet)</span></a>
+            </article>
+          </li>
+
+          <li class="project reveal" data-cat="dev">
+            <article class="card project-card">
+              <p class="project-code">SAÉ 1.4 <span>1<sup>re</sup> année</span></p>
+              <h3>Se présenter sur Internet</h3>
+              <p>Création d’un premier site personnel en HTML et CSS, avec présentation, centres d’intérêt et contacts.</p>
+              <ul class="chips chips-sm" aria-label="Outils"><li>HTML</li><li>CSS</li><li>Site personnel</li></ul>
+              <details>
+                <summary>Travaux réalisés</summary>
+                <div class="details-body">
+                  <p>Pages de présentation, navigation, mise en page et intégration de photographies.</p>
+                </div>
+              </details>
+              <a class="repo-link" href="https://github.com/LORENZI-Bastien/SAE-1.4-Site-web" target="_blank" rel="noopener noreferrer">Voir sur GitHub<span class="sr-only"> : Se présenter sur Internet (nouvel onglet)</span></a>
+            </article>
+          </li>
+
+          <li class="project reveal" data-cat="telecom">
+            <article class="card project-card">
+              <p class="project-code">SAÉ 1.3 <span>1<sup>re</sup> année</span></p>
+              <h3>Découvrir un dispositif de transmission</h3>
+              <p>Étude de la transmission Wi-Fi et comparaison de la puissance reçue pour différents types d’antennes.</p>
+              <ul class="chips chips-sm" aria-label="Outils"><li>Wi-Fi</li><li>Antennes</li><li>Calculs de transmission</li></ul>
+              <details>
+                <summary>Contenu du projet</summary>
+                <div class="details-body">
+                  <p>Mise en place du réseau Wi-Fi et comparaison des calculs de puissance reçue selon la distance et les gains d’antenne.</p>
+                </div>
+              </details>
+              <a class="repo-link" href="https://github.com/LORENZI-Bastien/SAE-1.3-Dispositif-transmission" target="_blank" rel="noopener noreferrer">Voir sur GitHub<span class="sr-only"> : Découvrir un dispositif de transmission (nouvel onglet)</span></a>
+            </article>
+          </li>
+
+          <li class="project reveal" data-cat="reseau">
+            <article class="card project-card">
+              <p class="project-code">SAÉ 1.2 <span>1<sup>re</sup> année</span></p>
+              <h3>S’initier aux réseaux informatiques</h3>
+              <p>Découverte des réseaux sur PC et Raspberry Pi : analyse du trafic, accès distant et partage de fichiers.</p>
+              <ul class="chips chips-sm" aria-label="Outils"><li>Wireshark</li><li>SSH</li><li>NFS / Samba</li><li>Nmap</li></ul>
+              <details>
+                <summary>Travaux réalisés</summary>
+                <div class="details-body">
+                  <p>Identification des adresses IP et MAC, observation des échanges réseau, connexion SSH et mise en place de partages.</p>
+                </div>
+              </details>
+              <a class="repo-link" href="https://github.com/LORENZI-Bastien/SAE-1.2-Reseaux-informatiques" target="_blank" rel="noopener noreferrer">Voir sur GitHub<span class="sr-only"> : S’initier aux réseaux informatiques (nouvel onglet)</span></a>
+            </article>
+          </li>
+
+          <li class="project reveal" data-cat="reseau cyber">
+            <article class="card project-card">
+              <p class="project-code">SAÉ 1.1 <span>1<sup>re</sup> année</span></p>
+              <h3>Hygiène numérique</h3>
+              <p>Une initiation aux fondamentaux des réseaux, accompagnée du badge Cisco Networking Basics.</p>
+              <ul class="chips chips-sm" aria-label="Outils"><li>Cisco</li><li>Networking Basics</li></ul>
+              <details>
+                <summary>Contenu du projet</summary>
+                <div class="details-body">
+                  <p>Badge Cisco Networking Basics obtenu dans le cadre de ma première année.</p>
+                </div>
+              </details>
+              <a class="repo-link" href="https://github.com/LORENZI-Bastien/SAE-1.1-Hygiene-numerique" target="_blank" rel="noopener noreferrer">Voir sur GitHub<span class="sr-only"> : Hygiène numérique (nouvel onglet)</span></a>
+            </article>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- PASSIONS -->
+    <section class="section section-alt" id="passions" aria-labelledby="titre-passions">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="eyebrow"><span>04</span> Passions</p>
+          <h2 id="titre-passions">Ce qui m’anime</h2>
+        </header>
+
+        <div class="passions">
+          <article class="passion passion-wide reveal">
+            <picture>
+              <source type="image/webp" srcset="images/handball-480.webp 480w, images/handball-820.webp 820w" sizes="(max-width: 860px) 100vw, 640px">
+              <img src="images/handball-820.jpg" srcset="images/handball-480.jpg 480w, images/handball-820.jpg 820w" sizes="(max-width: 860px) 100vw, 640px" width="820" height="547" loading="lazy" decoding="async" alt="Photo d’équipe de handball au HBC Lure Villers">
+            </picture>
+            <div class="passion-body">
+              <p class="card-kicker">Sport</p>
+              <h3>Le handball</h3>
+              <p>Je joue au HBC Lure Villers depuis l’âge de 9 ans. Le handball, c’est le plaisir du jeu en équipe, un moment pour décompresser et retrouver mes amis.</p>
+            </div>
+          </article>
+
+          <article class="passion reveal">
+            <picture>
+              <source type="image/webp" srcset="images/paysage-480.webp 480w, images/paysage-800.webp 800w" sizes="(max-width: 600px) 100vw, (max-width: 1100px) 50vw, 540px">
+              <img src="images/paysage-800.jpg" srcset="images/paysage-480.jpg 480w, images/paysage-800.jpg 800w" sizes="(max-width: 600px) 100vw, (max-width: 1100px) 50vw, 540px" width="800" height="600" loading="lazy" decoding="async" alt="Coucher de soleil au bord de l’eau, encadré par les arbres">
+            </picture>
+            <div class="passion-body">
+              <p class="card-kicker">Créativité</p>
+              <h3>La photographie</h3>
+              <p>J’aime capturer les paysages, la lumière et les couchers de soleil. La photographie me permet de garder une trace des moments et des lieux découverts au fil de mes voyages.</p>
+            </div>
+          </article>
+
+          <article class="passion reveal">
+            <picture>
+              <source type="image/webp" srcset="images/voyage-480.webp 480w, images/voyage-800.webp 800w" sizes="(max-width: 600px) 100vw, (max-width: 1100px) 50vw, 540px">
+              <img src="images/voyage-800.jpg" srcset="images/voyage-480.jpg 480w, images/voyage-800.jpg 800w" sizes="(max-width: 600px) 100vw, (max-width: 1100px) 50vw, 540px" width="800" height="600" loading="lazy" decoding="async" alt="Vue sur les nuages et le soleil couchant depuis un avion">
+            </picture>
+            <div class="passion-body">
+              <p class="card-kicker">Découverte</p>
+              <h3>Les voyages</h3>
+              <p>J’aime découvrir de nouveaux paysages, explorer d’autres cultures et sortir de mon quotidien. Chaque voyage est l’occasion de vivre de nouvelles expériences et de revenir avec des souvenirs à partager.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section contact" id="contact" aria-labelledby="titre-contact">
+      <div class="container">
+        <div class="contact-box reveal">
+          <header class="section-head">
+            <p class="eyebrow"><span>05</span> Contact</p>
+            <h2 id="titre-contact">Échangeons</h2>
+            <p class="section-intro">Pour échanger sur mon parcours, ma formation ou mes projets, écrivez-moi ou appelez-moi.</p>
+          </header>
+
+          <ul class="contact-list">
+            <li>
+              <a class="contact-item" href="mailto:bastienlorenzi70@gmail.com">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="m3 6 9 7 9-7"/></svg>
+                <span><small>E-mail</small>bastienlorenzi70@gmail.com</span>
+              </a>
+              <button class="copy-btn" type="button" data-copy="bastienlorenzi70@gmail.com" hidden>Copier<span class="sr-only"> l’adresse e-mail</span></button>
+            </li>
+            <li>
+              <a class="contact-item" href="tel:+33670220199">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h3.5l1.5 4.5-2.2 1.4a12 12 0 0 0 7.3 7.3l1.4-2.2L21 15.5V19a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2Z"/></svg>
+                <span><small>Téléphone</small>06 70 22 01 99</span>
+              </a>
+            </li>
+            <li>
+              <a class="contact-item" href="https://github.com/LORENZI-Bastien" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+                <span><small>GitHub</small>LORENZI-Bastien<span class="sr-only"> (nouvel onglet)</span></span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="annee">2026</span> Bastien Lorenzi · Portfolio étudiant</p>
+      <a href="#accueil" class="text-link">Revenir en haut <span aria-hidden="true">↑</span></a>
+    </div>
+  </footer>
+</body>
+</html>
