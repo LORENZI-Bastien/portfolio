@@ -1,0 +1,5 @@
+# Fichiers système à ne pas publier
+Thumbs.db
+Desktop.ini
+.DS_Store
+.vscode/
