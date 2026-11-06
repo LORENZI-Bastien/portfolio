@@ -1,6 +1,6 @@
 # Portfolio de Bastien Lorenzi
 
-Site personnel : https://wonderful-chebakia-f83e9d.netlify.app/
+Site personnel : https://bastien-lorenzi.netlify.app/
 
 Étudiant en 3e année de BUT Réseaux et Télécommunications (parcours cybersécurité) à Montbéliard, technicien en alternance chez Scutum.
 
