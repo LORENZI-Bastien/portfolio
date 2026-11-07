@@ -338,11 +338,13 @@ def sigle_senat(nom: str) -> str:
 def noms_senat(texte: str) -> list[str]:
     noms = []
     for morceau in texte.split(","):
-        morceau = re.sub(r"^\s*(?:MM\.|Mmes|Mme|M\.)\s+", "", morceau.strip())
+        # « * » = rectification de vote publiée par le Sénat : on l'enlève du nom
+        morceau = re.sub(r"^\s*(?:MM\.|Mmes|Mme|M\.)\s+", "", morceau.strip()).replace("*", "").strip()
         if not morceau:
             continue
         if noms and re.match(r"(?i)(président|vice-président|qui présidait)", morceau):
-            noms[-1] += f" ({morceau})"
+            if "(" not in noms[-1]:  # une seule précision suffit
+                noms[-1] += f" ({morceau})"
         else:
             noms.append(morceau)
     return noms
