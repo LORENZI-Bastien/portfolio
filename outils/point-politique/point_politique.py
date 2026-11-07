@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import gzip
 import html
 import io
 import json
@@ -68,7 +69,11 @@ MOIS_EN = {m: i for i, m in enumerate(
 def telecharger(url: str, timeout: int = 60) -> bytes:
     req = urllib.request.Request(url, headers={"User-Agent": UA})
     with urllib.request.urlopen(req, timeout=timeout) as r:
-        return r.read()
+        brut = r.read()
+        # vie-publique renvoie du gzip même sans Accept-Encoding
+        if r.headers.get("Content-Encoding", "").lower() == "gzip" or brut[:2] == b"\x1f\x8b":
+            brut = gzip.decompress(brut)
+        return brut
 
 
 def telecharger_fichier(url: str, timeout: int = 300) -> str:
@@ -120,7 +125,8 @@ def est_important(titre: str, type_vote: str = "") -> bool:
     return any(k in t for k in (
         "l'ensemble", "l’ensemble", "solennel", "motion de censure", "motion de rejet",
         "motion référendaire", "déclaration du gouvernement", "question préalable",
-        "engagement de la responsabilité", "article 49", "article 50-1",
+        "engagement de la responsabilité", "49, alinéa 3", "49.3", "article 50-1",
+        "première partie du projet de loi de finances",
         "proposition de résolution", "conclusions de la commission mixte",
     ))
 
@@ -289,7 +295,7 @@ def scrutins_senat_depuis_html(page: str, session: int) -> list[dict]:
         res.append({
             "numero": int(m.group(1)),
             "date": precedentes[-1].isoformat() if precedentes else "",
-            "titre": raccourcir(nettoyer(m.group(2)), 400),
+            "titre": raccourcir(re.sub(r"\s*-?\s*consulter le dossier législatif\.?", "", nettoyer(m.group(2)), flags=re.I), 400),
             "resultat": "adopté" if m.group(3).lower() == "adoption" else "rejeté",
             "lien": URL_SENAT_SCRUTIN.format(session=session, n=int(m.group(1))),
         })
@@ -311,10 +317,10 @@ def scrutins_senat(dernier_numero: int | None, aujourd_hui: dt.date) -> tuple[in
 # Flux RSS : textes déposés au Sénat, Panorama des lois (vie-publique / DILA)
 # --------------------------------------------------------------------------
 SIGLES_SENAT = {
-    "les républicains": "LR", "union centriste": "UC", "socialiste, écologiste et républicain": "SER",
+    "les républicains": "LR", "union centriste": "UC", "écologiste - solidarité": "GEST", "socialiste, écologiste et républicain": "SER",
     "communiste républicain citoyen et écologiste": "CRCE-K", "rassemblement démocratique et social européen": "RDSE",
     "rassemblement des démocrates, progressistes et indépendants": "RDPI",
-    "écologiste - solidarité et territoires": "GEST", "les indépendants - république et territoires": "LIRT",
+    "écologiste - solidarité et territoires": "GEST", "union nationale pour les territoires": "UNT", "les indépendants - république et territoires": "LIRT",
     "sénateurs ne figurant sur la liste d'aucun groupe": "Non-inscrits", "aucun groupe": "Non-inscrits",
 }
 LIBELLES_SENAT = {"pour": "pour", "contre": "contre", "abstention": "abstention", "abstentions": "abstention",
@@ -343,48 +349,42 @@ def noms_senat(texte: str) -> list[str]:
 
 
 def detail_senat_depuis_html(page: str) -> dict:
-    """Page d'un scrutin du Sénat : totaux + vote de chaque groupe avec les noms."""
+    """Page d'un scrutin du Sénat : totaux + vote de chaque groupe avec les noms.
+
+    Le HTML coupe les noms de groupe et les listes sur plusieurs lignes : on travaille
+    donc sur le texte mis à plat (un seul espace entre chaque mot).
+    """
     p = _Texte()
     p.feed(page)
-    texte = re.sub(r"[ \t\xa0]+", " ", "".join(p.morceaux)).replace("’", "'")
-    lignes = [l.strip() for l in texte.split("\n") if l.strip()]
-    debut = next((i for i, l in enumerate(lignes) if "analyse par groupes" in l.lower()), None)
-    tout = " ".join(lignes[:debut])  # totaux : seulement la partie « Résultat du scrutin »
+    texte = re.sub(r"\s+", " ", "".join(p.morceaux).replace("\xa0", " ").replace("’", "'"))
+    debut = texte.lower().find("analyse par groupes")
+    fin = texte.lower().find("analyse détaillée", max(debut, 0))
     res = {"groupes": []}
-    for cle, motif in (("pour", r"(\d+)\s+pour\b"), ("contre", r"(\d+)\s+contre\b"),
+    resultat = texte[:debut] if debut >= 0 else texte
+    for cle, motif in (("pour", r"(\d+)\s*pour\b"), ("contre", r"(\d+)\s*contre\b"),
                        ("abstentions", r"Abstentions?\s*:\s*(\d+)")):
-        m = re.search(motif, tout, re.I)
+        m = re.search(motif, resultat, re.I)
         if m:
             res[cle] = int(m.group(1))
-    if debut is None:
+    if debut < 0:
         return res
-    groupe = None
-    labels = "|".join(re.escape(k) for k in sorted(LIBELLES_SENAT, key=len, reverse=True))
-    # Ligne « Pour : 12 » ou « Pour : Mmes A, B » ; libellé parfois sur sa propre ligne (texte en gras)
-    for i in range(debut + 1, len(lignes)):
-        l = lignes[i]
-        if "analyse détaillée" in l.lower():
-            break
-        m = re.match(r"^(?:Groupe\s+)?(.+?)\s*:\s*(\d+)\s*sénateurs?$", l, re.I)
-        if m:
-            groupe = {"groupe": sigle_senat(m.group(1)), "membres": int(m.group(2)), "pour": 0,
-                      "contre": 0, "abstention": 0, "noms": {"pour": [], "contre": [], "abstention": [], "non-votant": []}}
-            res["groupes"].append(groupe)
-            continue
-        if groupe is None:
-            continue
-        if re.fullmatch(f"(?i)({labels})", l) and i + 1 < len(lignes) and lignes[i + 1].startswith(":"):
-            l = l + " " + lignes[i + 1]
-        m = re.match(f"(?i)^({labels})\\s*:\\s*(.+)$", l)
-        if not m:
-            continue
-        pos = LIBELLES_SENAT[m.group(1).lower()]
-        valeur = m.group(2).strip()
-        if re.fullmatch(r"\d+", valeur):
-            if pos in ("pour", "contre", "abstention"):
-                groupe[pos] = int(valeur)
-        else:
-            groupe["noms"][pos] += noms_senat(valeur)
+    section = texte[debut:fin if fin > 0 else len(texte)]
+    entete = re.compile(r"((?:Groupe\s|Sénateurs ne figurant)[^:]{2,150}?)\s*:\s*(\d+)\s*sénateurs?", re.I)
+    labels = r"Pour|Contre|Abstentions?|N'ont pas pris part au vote|N'a pas pris part au vote"
+    entetes = list(entete.finditer(section))
+    for k, m in enumerate(entetes):
+        bloc = section[m.end(): entetes[k + 1].start() if k + 1 < len(entetes) else len(section)]
+        nom = re.sub(r"^Groupe\s+(?:du\s+|de la\s+|des\s+)?", "", m.group(1).strip(), flags=re.I)
+        g = {"groupe": sigle_senat(nom), "membres": int(m.group(2)), "pour": 0, "contre": 0, "abstention": 0,
+             "noms": {"pour": [], "contre": [], "abstention": [], "non-votant": []}}
+        for pos, motif in (("pour", r"\bPour\s*:\s*(\d+)"), ("contre", r"\bContre\s*:\s*(\d+)"),
+                           ("abstention", r"\bAbstentions?\s*:\s*(\d+)")):
+            c = re.search(motif, bloc)
+            if c:
+                g[pos] = int(c.group(1))
+        for n in re.finditer(rf"({labels})\s*:\s*((?:MM?\.|Mmes?)\s.+?)(?=\s(?:{labels})\s*:|$)", bloc):
+            g["noms"][LIBELLES_SENAT[n.group(1).lower()]] += noms_senat(n.group(2))
+        res["groupes"].append(g)
     return res
 
 

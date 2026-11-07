@@ -50,24 +50,40 @@ def zip_amo():
     return f.name
 
 
+def bloc_groupe(code, nom, membres, pour, contre, abst, nv, listes):
+    noms = "".join(f'<li class="mb-2"><b>{lab}</b>&nbsp;:\n{txt}</li>' for lab, txt in listes)
+    return f"""<div class="accordion-item" id="accordion-scrutin-{code}">
+<h3 class="accordion-title fs-5">{nom}&nbsp;:
+{membres}<span class="visually-hidden">s&eacute;nateurs</span></h3>
+<ul class="list-inline mb-0" aria-label="Détail des votants pour le Groupe">
+<li class="list-inline-item"><svg></svg>Pour&nbsp;:
+<span class="ms-1 fw-semibold">{pour}</span></li>
+<li class="list-inline-item">Contre&nbsp;: <span class="ms-1 fw-semibold">{contre}</span></li>
+<li class="list-inline-item">Abstention&nbsp;: <span>{abst}</span></li><li>N'a
+pas pris part au vote&nbsp;: <span>{nv}</span></li></ul>
+<button>Voir le détail</button>
+<div class="accordion-body"><ul class="list-unstyled mb-0">{noms}</ul></div></div>"""
+
+
+# Reproduit la vraie page (relevée sur scr2026-56 le 2026-11-07) : noms de groupe et listes
+# coupés sur plusieurs lignes, « 124sénateurs » collé, nombres dans des <span>.
 SENAT_DETAIL = """<html><head><meta charset="utf-8"><title>Scrutin n°56</title></head><body>
 <h1>Scrutin n°56 - séance du 5 novembre 2026</h1>
-<h2>Résultat du scrutin</h2><p>Le Sénat a adopté</p>
+<h2>Résultat du scrutin</h2><p>Le Sénat n'a pas adopté</p>
 <ul><li><strong>343</strong> votants</li><li><strong>343</strong> suffrages exprimés</li>
-<li><strong>186</strong> pour</li><li><strong>157</strong> contre</li><li>Abstention : 0</li>
+<li><strong>157</strong> pour</li><li><strong>186</strong> contre</li><li>Abstention : 0</li>
 <li>N'ont pas pris part au vote : 5</li></ul>
-<h2>Analyse par groupes politiques</h2>
-<h3>Groupe Les Républicains : 124sénateurs</h3>
-<ul><li>Pour : 123</li><li>Contre : 0</li><li>Abstention : 0</li><li>N'a pas pris part au vote : 1</li></ul>
-<ul><li><strong>Pour</strong> : MM. Thierry d'Aigremont, Pascal Allizard, Mme Marie-Do Aeschlimann</li>
-<li><strong>N'ont pas pris part au vote</strong> : M. Gérard Larcher, Président du Sénat</li></ul>
-<h3>Groupe Socialiste, Écologiste et Républicain : 62sénateurs</h3>
-<ul><li>Pour : 0</li><li>Contre : 62</li><li>Abstention : 0</li><li>N'a pas pris part au vote : 0</li></ul>
-<ul><li><strong>Contre</strong> : Mmes Viviane Artigalas, Audrey Bélim</li></ul>
-<h3>Sénateurs ne figurant sur la liste d'aucun groupe : 3sénateurs</h3>
-<ul><li>Pour : 1</li><li>Contre : 2</li></ul>
-<ul><li><strong>Pour</strong> : M. Jean Untel</li><li><strong>Contre</strong> : MM. Paul A, Jacques B</li></ul>
-<h2>Analyse détaillée</h2><h3>Ont voté pour</h3><ul><li>Thierry d'Aigremont</li></ul>
+<h2>Analyse par groupes politiques</h2>""" + bloc_groupe(
+    "UMP", "Groupe Les R&eacute;publicains", 124, 0, 123, 0, 1,
+    [("Contre", "Mmes Marie-Do Aeschlimann, G&eacute;raldine Amouroux, M. Jean-Claude Anglars,\nMme V&eacute;ronique Baude"),
+     ("N'ont pas pris part au vote", "M. G&eacute;rard Larcher, Pr&eacute;sident du S&eacute;nat")]) + bloc_groupe(
+    "SOCR", "Groupe Socialiste, &Eacute;cologiste et\nR&eacute;publicain", 62, 62, 0, 0, 0,
+    [("Pour", "Mmes Viviane Artigalas,\nAudrey B&eacute;lim")]) + bloc_groupe(
+    "UNT", "Groupe Union Nationale pour les\nTerritoires", 15, 0, 0, 15, 0,
+    [("Abstention", "MM. Jean Un, Paul Deux")]) + bloc_groupe(
+    "NI", "S&eacute;nateurs ne figurant sur la liste\nd'aucun groupe", 3, 1, 2, 0, 0,
+    [("Pour", "M. Jean Untel"), ("Contre", "MM. Paul A, Jacques B")]) + """
+<h2>Analyse détaillée</h2><h3>Ont voté pour</h3><ul><li>Viviane Artigalas</li></ul>
 </body></html>"""
 
 
@@ -157,16 +173,30 @@ class Tests(unittest.TestCase):
 
     def test_detail_senat(self):
         d = pp.detail_senat_depuis_html(SENAT_DETAIL)
-        self.assertEqual((d["pour"], d["contre"], d["abstentions"]), (186, 157, 0))
+        self.assertEqual((d["pour"], d["contre"], d["abstentions"]), (157, 186, 0))
         g = {x["groupe"]: x for x in d["groupes"]}
-        self.assertEqual(set(g), {"LR", "SER", "Non-inscrits"})
+        self.assertEqual(set(g), {"LR", "SER", "UNT", "Non-inscrits"})
         self.assertEqual(g["LR"]["membres"], 124)
-        self.assertEqual(g["LR"]["pour"], 123)
-        self.assertEqual(g["LR"]["noms"]["pour"], ["Thierry d'Aigremont", "Pascal Allizard", "Marie-Do Aeschlimann"])
+        self.assertEqual((g["LR"]["pour"], g["LR"]["contre"]), (0, 123))
+        self.assertEqual(g["LR"]["noms"]["contre"], ["Marie-Do Aeschlimann", "Géraldine Amouroux", "Jean-Claude Anglars", "Véronique Baude"])
         self.assertEqual(g["LR"]["noms"]["non-votant"], ["Gérard Larcher (Président du Sénat)"])
-        self.assertEqual(g["SER"]["contre"], 62)
-        self.assertEqual(g["SER"]["noms"]["contre"], ["Viviane Artigalas", "Audrey Bélim"])
+        self.assertEqual(g["SER"]["pour"], 62)
+        self.assertEqual(g["SER"]["noms"]["pour"], ["Viviane Artigalas", "Audrey Bélim"])
+        self.assertEqual(g["UNT"]["abstention"], 15)
+        self.assertEqual(g["Non-inscrits"]["noms"]["pour"], ["Jean Untel"])
         self.assertEqual(g["Non-inscrits"]["noms"]["contre"], ["Paul A", "Jacques B"])
+
+    def test_gzip_et_importance(self):
+        import gzip
+        class R(io.BytesIO):
+            headers = {"Content-Encoding": "gzip"}
+            def __enter__(self): return self
+            def __exit__(self, *a): pass
+        with mock.patch.object(pp.urllib.request, "urlopen", lambda *a, **k: R(gzip.compress(VP_RSS))):
+            self.assertEqual(len(pp.lire_rss(pp.telecharger("https://x"))), 1)
+        self.assertFalse(pp.est_important("l'amendement n° 939 de suppression de l'article 49 du projet de loi de finances pour 2027"))
+        self.assertTrue(pp.est_important("la première partie du projet de loi de finances pour 2027 (première lecture)"))
+        self.assertTrue(pp.est_important("la motion de censure déposée en application de l'article 49, alinéa 3"))
 
     def test_session(self):
         self.assertEqual(pp.session_parlementaire(dt.date(2026, 11, 7)), 2026)
@@ -208,8 +238,8 @@ class Tests(unittest.TestCase):
             self.assertIn("200 autres scrutins", texte)
             self.assertIn("Sénat", texte)
             self.assertIn("||🗳️ AAA ✅2 ⚪1 · BBB ❌1||", texte)
-            self.assertIn("||🗳️ LR ✅123 · SER ❌62 · Non-inscrits ✅1 ❌2||", texte)
-            self.assertIn("✅ **Adopté** (186 pour, 157 contre, 0 abst.)", texte)
+            self.assertIn("||🗳️ LR ❌123 · SER ✅62 · UNT ⚪15 · Non-inscrits ✅1 ❌2||", texte)
+            self.assertIn("✅ **Adopté** (157 pour, 186 contre, 0 abst.)", texte)
             nom_fichier, detail = envoyes[0][1]
             print("\n----- " + nom_fichier + "\n" + detail)
             self.assertEqual(nom_fichier, "votes-2026-11-07.txt")
