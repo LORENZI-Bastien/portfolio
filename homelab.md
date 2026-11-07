@@ -8,13 +8,16 @@ Une tâche planifiée le relit chaque jour à 5 h et met à jour les deux si que
 *Dernière mise à jour : 7 novembre 2026*
 
 ## En bref
-Homelab sur du matériel de récupération : une tour Windows qui fait tourner 14 conteneurs Docker sous WSL2, et un Raspberry Pi 5 allumé 24 h/24. Accès à distance uniquement par Tailscale, aucun port ouvert sur la box, tous les services en HTTPS.
+Homelab sur du matériel de récupération : un Raspberry Pi 5 allumé 24 h/24 pour les services du quotidien, et une tour Windows (Docker sous WSL2, GPU) réveillée à la demande pour l'IA locale et les tâches lourdes. Accès à distance uniquement par Tailscale, aucun port ouvert sur la box, tous les services en HTTPS.
+
+## Architecture (décidée le 7 novembre 2026)
+Le Raspberry Pi devient le serveur allumé 24 h/24 : il porte tous les services légers. La tour, plus puissante mais gourmande, ne sert plus que quand on en a besoin : le Pi la réveille (Wake-on-LAN) pour l'IA locale, et chaque soir pour copier les photos sur son disque de données, lancer la reconnaissance de visages et la sauvegarde, avant qu'elle ne s'éteigne. Objectif : services toujours disponibles et consommation électrique réduite.
 
 ## Machines
 | Machine | Matériel | Système | Services |
 |---|---|---|---|
 | Tour | Ryzen 5 1600, 16 Go, GTX 1660 Super 6 Go, SSD système + disques de données | Windows 10, WSL2, Docker Desktop | Ollama (IA locale sur GPU), Open WebUI, Immich, Jellyfin, Navidrome, Home Assistant, n8n, Uptime Kuma, Homepage (Vaultwarden, Radicale et AdGuard Home restent en place le temps de la bascule vers le Pi) |
-| Raspberry Pi 5 | 8 Go, SSD NVMe 256 Go | Raspberry Pi OS 64 bits, Docker | Tailscale, AdGuard Home (DNS de tout le VPN, résolveur amont en DoH), Vaultwarden, Radicale, Immich (migrés depuis la tour), point politique quotidien |
+| Raspberry Pi 5 | 8 Go, SSD NVMe 256 Go | Raspberry Pi OS 64 bits, Docker | Tailscale, AdGuard Home (DNS de tout le VPN, résolveur amont en DoH), Vaultwarden, Radicale, Immich sans analyse IA (migrés depuis la tour), n8n, Uptime Kuma, point politique quotidien ; ensuite Home Assistant, Homepage… (environ 2,3 Go de RAM utilisés sur 8) |
 
 Préparés mais éteints : Prometheus, Grafana, Paperless-ngx.
 
@@ -55,11 +58,12 @@ WSL2, Docker Compose (volumes, bind mounts, profils, limites mémoire), Tailscal
 
 ## En cours
 - Remplacer le disque de sauvegarde, lancer et vérifier la première sauvegarde complète, puis réactiver la sauvegarde nocturne (en y ajoutant le Pi)
+- Déplacer les services restants vers le Pi (Home Assistant, Homepage…)
 - Basculer les téléphones vers le Pi (mots de passe, calendrier, photos) après une dernière synchronisation, puis arrêter ces services sur la tour
 - Activer la double authentification du gestionnaire de mots de passe
 
 ## Prévu
-- Ethernet pour la tour et le Pi, puis Wake-on-LAN de la tour depuis le Pi
+- Ethernet pour la tour et le Pi, puis Wake-on-LAN de la tour depuis le Pi (réveil à la demande et tâche du soir : photos, reconnaissance de visages, sauvegarde, extinction)
 - ACL Tailscale écrites à la main
 - Réactiver Prometheus et Grafana
 - Labo Kubernetes (k3s)
