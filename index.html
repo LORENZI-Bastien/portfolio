@@ -489,7 +489,7 @@
             <p class="card-kicker">Serveur principal</p>
             <h3>La tour</h3>
             <p class="card-meta">Ryzen 5 1600 · 16 Go · GTX 1660 Super · Windows 10, WSL2 et Docker</p>
-            <p>Tous les services sont décrits dans un seul fichier Docker Compose, avec des limites de mémoire pour tenir dans 16 Go. La carte graphique sert à l’IA locale et au transcodage vidéo.</p>
+            <p>Tous les services sont décrits dans un seul fichier Docker Compose, avec des limites de mémoire pour tenir dans 16 Go. La carte graphique sert à l’IA locale et au transcodage vidéo. Vaultwarden, Radicale et AdGuard Home y restent le temps de leur bascule vers le Pi.</p>
             <ul class="chips chips-sm">
               <li>Ollama</li><li>Open WebUI</li><li>Immich</li><li>Jellyfin</li><li>Navidrome</li><li>Home Assistant</li><li>n8n</li><li>Vaultwarden</li><li>Radicale</li><li>AdGuard Home</li><li>Uptime Kuma</li><li>Homepage</li>
             </ul>
@@ -520,6 +520,7 @@
               <li>Pare-feu sur chaque hôte, activé avec un retour arrière automatique</li>
               <li>SSH par clé, mises à jour de sécurité automatiques</li>
               <li>Secrets dans des fichiers à accès restreint, jamais dans le code</li>
+              <li>Inscriptions fermées sur le gestionnaire de mots de passe</li>
               <li>Sauvegardes versionnées plutôt qu’un RAID</li>
             </ul>
           </article>
@@ -535,6 +536,11 @@
               <li><strong>Disque de sauvegarde défaillant.</strong> Lecture des journaux Windows et <code>chkdsk</code> en lecture seule, sans jamais écrire sur un disque qui lâche.</li>
               <li><strong>Migration de services vers le Pi.</strong> Export des bases, transfert chiffré, vérification SHA256 et comparaison des comptages avant et après.</li>
               <li><strong>Faire tenir l’IA dans 6 Go de VRAM.</strong> Modèles de 4 à 8 milliards de paramètres, un seul chargé à la fois, services secondaires éteints par défaut.</li>
+              <li><strong>Reverse proxy refusé par Home Assistant.</strong> Il fallait déclarer le proxy comme source de confiance dans sa configuration.</li>
+              <li><strong>Mots de passe d’administration perdus.</strong> Réinitialisation sans perte de données, après avoir sauvegardé les bases.</li>
+            </ul>
+            <ul class="chips chips-sm" aria-label="Compétences acquises">
+              <li>WSL2</li><li>Docker Compose</li><li>Tailscale et WireGuard</li><li>Reverse proxy et TLS</li><li>DNS filtrant et DoH</li><li>Pare-feu hôte</li><li>cloud-init</li><li>Dump PostgreSQL / SQLite</li><li>rsync</li><li>Diagnostic disque</li>
             </ul>
           </article>
 
@@ -542,7 +548,9 @@
             <p class="card-kicker">La suite</p>
             <h3>En cours et prévu</h3>
             <ul class="check-list lab-todo">
-              <li>Remplacer le disque de sauvegarde et lancer la sauvegarde automatique nocturne</li>
+              <li>Remplacer le disque de sauvegarde, vérifier une première sauvegarde complète, puis réactiver la sauvegarde nocturne (Pi compris) : c’est le point faible actuel</li>
+              <li>Basculer les téléphones vers le Pi (mots de passe, calendrier, photos), puis arrêter ces services sur la tour</li>
+              <li>Activer la double authentification du gestionnaire de mots de passe</li>
               <li>Câbler la tour et le Pi en Ethernet, puis réveiller la tour la nuit depuis le Pi (Wake-on-LAN)</li>
               <li>Écrire mes propres règles d’accès (ACL) sur le VPN</li>
               <li>Réactiver la supervision Prometheus et Grafana</li>
