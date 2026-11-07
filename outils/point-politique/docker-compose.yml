@@ -1,0 +1,14 @@
+# Point politique quotidien (Raspberry Pi). Lancer : docker compose up -d --build
+services:
+  point-politique:
+    build: .
+    container_name: point-politique
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      TZ: Europe/Paris
+      FICHIER_ETAT: /data/etat.json
+    volumes:
+      - ./data:/data
+    mem_limit: 256m
+    # Aucun port ouvert : le service ne fait que des requêtes sortantes.
