@@ -19,7 +19,7 @@ Homelab sur du matériel de récupération : une tour Windows qui fait tourner 1
 Préparés mais éteints : Prometheus, Grafana, Paperless-ngx.
 
 ## Projet maison : point politique quotidien
-Petit service en Python (sans dépendance), dans un conteneur Docker sur le Pi, sans aucun port ouvert. Chaque matin, il lit les données ouvertes officielles (scrutins de l'Assemblée nationale, scrutins et textes du Sénat, Panorama des lois de vie-publique) et envoie un résumé neutre sur un salon Discord : votes importants adoptés ou rejetés, détail par groupe politique masqué, et fichier joint avec le vote nominatif des députés et sénateurs. Anti-doublon par fichier d'état, tolérance aux pannes d'une source, 10 tests unitaires. Résumé de contexte par l'IA locale prévu en option.
+Petit service en Python (sans dépendance), dans un conteneur Docker sur le Pi, sans aucun port ouvert. Chaque matin, il lit les données ouvertes officielles (scrutins de l'Assemblée nationale, scrutins et textes du Sénat, Panorama des lois de vie-publique) et envoie un résumé neutre sur un salon Discord : votes importants adoptés ou rejetés, détail par groupe politique masqué, et fichier joint avec le vote nominatif des députés et sénateurs. Anti-doublon par fichier d'état, tolérance aux pannes d'une source, 10 tests unitaires. Résumé de contexte par l'IA locale prévu en option. Code source : [outils/point-politique](outils/point-politique/).
 
 ## Réseau
 - Un seul réseau local derrière la box, pas de VLAN
