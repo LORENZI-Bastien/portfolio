@@ -448,12 +448,12 @@
         <header class="section-head reveal">
           <p class="eyebrow"><span>04</span> Homelab</p>
           <h2 id="titre-homelab">Mon homelab</h2>
-          <p class="section-intro">Chez moi, j’ai monté une petite infrastructure sur du matériel de récupération : une tour qui fait tourner une quinzaine de services en conteneurs Docker, et un Raspberry Pi 5 allumé 24 h/24. Tout l’accès à distance passe par un VPN, sans aucun port ouvert sur la box.</p>
+          <p class="section-intro">Chez moi, j’ai monté une petite infrastructure sur du matériel de récupération : un Raspberry Pi 5 allumé 24 h/24 pour les services du quotidien, et une tour réveillée à la demande pour l’IA locale et les tâches lourdes. Objectif : des services toujours disponibles et une consommation électrique réduite. Tout l’accès à distance passe par un VPN, sans aucun port ouvert sur la box.</p>
         </header>
 
         <ul class="lab-stats reveal" aria-label="Le homelab en chiffres">
           <li><strong>2</strong><span>serveurs</span></li>
-          <li><strong>14</strong><span>conteneurs sur la tour</span></li>
+          <li><strong>24&nbsp;h/24</strong><span>sur un Raspberry Pi</span></li>
           <li><strong>0</strong><span>port ouvert sur Internet</span></li>
           <li><strong>100&nbsp;%</strong><span>des services en HTTPS</span></li>
         </ul>
@@ -475,8 +475,8 @@
           <div class="lab-link" aria-hidden="true"></div>
           <div class="lab-col">
             <p class="lab-col-title">Serveurs</p>
-            <div class="lab-node"><strong>Tour</strong><span>IA locale, médias, photos, domotique</span></div>
-            <div class="lab-node"><strong>Raspberry Pi 5</strong><span>DNS, mots de passe, calendrier, photos</span></div>
+            <div class="lab-node"><strong>Raspberry Pi 5</strong><span>Allumé 24 h/24 : DNS, mots de passe, photos, automatisations</span></div>
+            <div class="lab-node"><strong>Tour</strong><span>À la demande : IA locale, tâches lourdes</span></div>
           </div>
           <figcaption>Les appareils se joignent par le VPN, à la maison comme en 4G. Les services n’écoutent que sur la machine elle-même et Tailscale les publie en HTTPS.</figcaption>
         </figure>
@@ -486,10 +486,10 @@
             <div class="card-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M9 6h6M9 10h6"/><circle cx="12" cy="17" r="1.5"/></svg>
             </div>
-            <p class="card-kicker">Serveur principal</p>
+            <p class="card-kicker">Puissance à la demande</p>
             <h3>La tour</h3>
             <p class="card-meta">Ryzen 5 1600 · 16 Go · GTX 1660 Super · Windows 10, WSL2 et Docker</p>
-            <p>Tous les services sont décrits dans un seul fichier Docker Compose, avec des limites de mémoire pour tenir dans 16 Go. La carte graphique sert à l’IA locale et au transcodage vidéo. Vaultwarden, Radicale et AdGuard Home y restent le temps de leur bascule vers le Pi.</p>
+            <p>Plus puissante mais gourmande, elle ne sert plus que quand on en a besoin. Le Pi la réveillera (Wake-on-LAN) pour l’IA locale, et chaque soir pour copier les photos, lancer la reconnaissance de visages et la sauvegarde, avant qu’elle ne s’éteigne. Ses services légers basculent un à un vers le Pi.</p>
             <ul class="chips chips-sm">
               <li>Ollama</li><li>Open WebUI</li><li>Immich</li><li>Jellyfin</li><li>Navidrome</li><li>Home Assistant</li><li>n8n</li><li>Vaultwarden</li><li>Radicale</li><li>AdGuard Home</li><li>Uptime Kuma</li><li>Homepage</li>
             </ul>
@@ -499,12 +499,12 @@
             <div class="card-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h2M7 13h2M13 9h4v6h-4z"/></svg>
             </div>
-            <p class="card-kicker">Services 24 h/24</p>
+            <p class="card-kicker">Serveur 24 h/24</p>
             <h3>Le Raspberry Pi 5</h3>
             <p class="card-meta">8 Go · SSD NVMe 256 Go · Raspberry Pi OS et Docker</p>
-            <p>Il porte les services qui doivent rester allumés en permanence. Installé automatiquement avec cloud-init, il sert de DNS à tout le réseau privé.</p>
+            <p>Il porte tous les services légers, avec environ 2,3 Go de RAM utilisés sur 8. Installé automatiquement avec cloud-init, il sert de DNS à tout le réseau privé.</p>
             <ul class="chips chips-sm">
-              <li>Tailscale</li><li>AdGuard Home (DNS-over-HTTPS)</li><li>Vaultwarden</li><li>Radicale</li><li>Immich</li>
+              <li>Tailscale</li><li>AdGuard Home (DNS-over-HTTPS)</li><li>Vaultwarden</li><li>Radicale</li><li>Immich</li><li>n8n</li><li>Uptime Kuma</li><li>Point politique quotidien</li>
             </ul>
           </article>
 
@@ -524,6 +524,16 @@
               <li>Sauvegardes versionnées plutôt qu’un RAID</li>
             </ul>
           </article>
+
+          <article class="card lab-project reveal">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5Z"/><path d="M8 9h8M8 12h5"/></svg>
+            </div>
+            <p class="card-kicker">Projet maison</p>
+            <h3>Le point politique quotidien</h3>
+            <p class="card-meta">Python sans dépendance · conteneur Docker sur le Pi · aucun port ouvert</p>
+            <p>Chaque matin, ce petit service lit les données ouvertes officielles (scrutins de l’Assemblée nationale, scrutins et textes du Sénat, Panorama des lois de vie-publique) et envoie un résumé neutre sur un salon Discord : votes importants adoptés ou rejetés, détail par groupe politique masqué par défaut, et fichier joint avec le vote nominatif des députés et sénateurs. Anti-doublon par fichier d’état, tolérance aux pannes d’une source et 10 tests unitaires. <a href="https://github.com/LORENZI-Bastien/portfolio/tree/main/outils/point-politique" target="_blank" rel="noopener">Voir le code</a></p>
+          </article>
         </div>
 
         <div class="lab-bottom">
@@ -540,7 +550,7 @@
               <li><strong>Mots de passe d’administration perdus.</strong> Réinitialisation sans perte de données, après avoir sauvegardé les bases.</li>
             </ul>
             <ul class="chips chips-sm" aria-label="Compétences acquises">
-              <li>WSL2</li><li>Docker Compose</li><li>Tailscale et WireGuard</li><li>Reverse proxy et TLS</li><li>DNS filtrant et DoH</li><li>Pare-feu hôte</li><li>cloud-init</li><li>Dump PostgreSQL / SQLite</li><li>rsync</li><li>Diagnostic disque</li>
+              <li>WSL2</li><li>Docker Compose</li><li>Tailscale et WireGuard</li><li>Reverse proxy et TLS</li><li>DNS filtrant et DoH</li><li>Pare-feu hôte</li><li>cloud-init</li><li>Dump PostgreSQL / SQLite</li><li>rsync</li><li>Diagnostic disque</li><li>Données ouvertes (JSON, RSS)</li><li>Webhooks Discord</li>
             </ul>
           </article>
 
@@ -549,9 +559,10 @@
             <h3>En cours et prévu</h3>
             <ul class="check-list lab-todo">
               <li>Remplacer le disque de sauvegarde, vérifier une première sauvegarde complète, puis réactiver la sauvegarde nocturne (Pi compris) : c’est le point faible actuel</li>
+              <li>Déplacer les services restants vers le Pi (Home Assistant, Homepage…)</li>
               <li>Basculer les téléphones vers le Pi (mots de passe, calendrier, photos), puis arrêter ces services sur la tour</li>
               <li>Activer la double authentification du gestionnaire de mots de passe</li>
-              <li>Câbler la tour et le Pi en Ethernet, puis réveiller la tour la nuit depuis le Pi (Wake-on-LAN)</li>
+              <li>Câbler la tour et le Pi en Ethernet, puis réveiller la tour depuis le Pi (Wake-on-LAN) : à la demande et chaque soir pour les photos et la sauvegarde</li>
               <li>Écrire mes propres règles d’accès (ACL) sur le VPN</li>
               <li>Réactiver la supervision Prometheus et Grafana</li>
               <li>Un labo Kubernetes (k3s) pour apprendre</li>
