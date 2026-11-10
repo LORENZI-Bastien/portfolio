@@ -5,7 +5,7 @@ Une tâche planifiée le relit chaque jour à 5 h et met à jour les deux si que
 
 **Règles :** rien de sensible ici (pas d'IP, de nom de domaine, de nom de machine, de compte, d'identifiant ni de nombre d'entrées). Ce fichier n'est pas servi par le site (`_redirects`).
 
-*Dernière mise à jour : 9 novembre 2026*
+*Dernière mise à jour : 10 novembre 2026*
 
 ## En bref
 Homelab sobre en énergie : tout tourne sur un Raspberry Pi 5 allumé 24 h/24, en conteneurs Docker. Accès à distance uniquement par Tailscale, aucun port ouvert sur la box, tous les services en HTTPS.
@@ -30,10 +30,14 @@ Homelab sobre en énergie : tout tourne sur un Raspberry Pi 5 allumé 24 h/24, e
 - **Uptime Kuma** : supervision de disponibilité
 - **Home Assistant** : domotique
 - **Homepage** : portail d'accueil
-- **Point politique quotidien** : projet maison (voir plus bas)
+- **Point politique quotidien** : projet maison (voir plus bas), envoyé chaque matin sur Discord
 
-## Projet maison : point politique quotidien
-Petit service en Python (sans dépendance), dans un conteneur Docker sur le Pi, sans aucun port ouvert. Chaque matin, il lit les données ouvertes officielles (scrutins de l'Assemblée nationale, scrutins et textes du Sénat, Panorama des lois de vie-publique) et envoie un résumé neutre sur un salon Discord : votes importants adoptés ou rejetés, détail par groupe politique masqué, et fichier joint avec le vote nominatif des députés et sénateurs. Anti-doublon par fichier d'état, tolérance aux pannes d'une source, 10 tests unitaires. Code source : [outils/point-politique](outils/point-politique/).
+## Projets maison : le récap du matin sur Discord
+Chaque matin à 7 h 45, deux messages automatiques arrivent sur un serveur Discord privé.
+
+**Point politique** : petit service en Python (sans dépendance), dans un conteneur Docker sur le Pi, sans aucun port ouvert. Chaque matin, il lit les données ouvertes officielles (scrutins de l'Assemblée nationale, scrutins et textes du Sénat, Panorama des lois de vie-publique) et envoie un résumé neutre sur un salon Discord : votes importants adoptés ou rejetés, détail par groupe politique masqué, et fichier joint avec le vote nominatif des députés et sénateurs. Mise en page pensée pour la lecture sur téléphone : titres courts, chiffres sur une ligne, détail des votes par groupe (pour, contre, abstention) masqué en spoiler, liens cliquables vers les textes. Anti-doublon par fichier d'état, tolérance aux pannes d'une source, 10 tests unitaires. Code source : [outils/point-politique](outils/point-politique/).
+
+**Point actu** : les 10 infos du jour en format court, rédigées par une tâche d'IA planifiée (recherche web et revues de presse) et postées sous forme de cartes (embeds Discord) via webhook.
 
 ## Réseau
 - Un seul réseau local derrière la box, pas de VLAN
