@@ -449,21 +449,58 @@ def resume_ia(faits: str) -> str:
 # --------------------------------------------------------------------------
 # Mise en forme
 # --------------------------------------------------------------------------
-def ligne_vote(s: dict, lien: str) -> str:
-    icone = "✅" if s["resultat"] == "adopté" else "❌"
-    chiffres = ""
+def titre_court(titre: str) -> tuple[str, str]:
+    """Titre officiel -> (titre court lisible, nature du texte)."""
+    t = re.sub(r"\s*\((première|deuxième|nouvelle) lecture\)\.?$", "", titre.strip().rstrip("."), flags=re.I)
+    t = re.sub(r"^sur\s+", "", t, flags=re.I)
+    partie = ""
+    m = re.match(r"^(?:l['’]article unique constituant\s+)?l['’]ensemble\s+(?:du|de la|des|de l['’])\s*", t, re.I)
+    if m:
+        t = t[m.end():]
+        partie = "texte entier"
+    m = re.match(r"^la (première|seconde|deuxième) partie\s+(?:du|de la)\s+", t, re.I)
+    if m:
+        t = t[m.end():]
+        partie = f"{m.group(1)} partie"
+    nature = ""
+    m = re.match(r"^(projet|proposition) de (loi organique|loi constitutionnelle|loi|résolution)\s*", t, re.I)
+    if m:
+        nature = f"{m.group(1).capitalize()} de {m.group(2)}"
+        t = t[m.end():]
+    m = re.match(r"^de finances (?:rectificative |de fin de gestion )?pour (\d{4})", t, re.I)
+    if m and nature.startswith("Projet de loi"):
+        t = ("Budget de fin d'année " if "fin de gestion" in t else "Budget rectificatif " if "rectificative" in t
+             else "Budget de l'État ") + m.group(1)
+    m = re.match(r"^de financement de la sécurité sociale pour (\d{4})", t, re.I)
+    if m:
+        t = "Budget de la Sécu " + m.group(1)
+    t = re.sub(r"^(?:relatif|relative|visant|tendant|portant|pour|sur)(?:\s+(?:à|au|aux))?\s+", "", t, flags=re.I)
+    t = re.sub(r"^(?:la|le|les|l['’])\s*", "", t, flags=re.I) if not t.lower().startswith("l'ensemble") else t
+    t = t[:1].upper() + t[1:]
+    return raccourcir(t, 140), " · ".join(x for x in (nature, partie) if x)
+
+
+def lignes_vote(s: dict, lien: str) -> list[str]:
+    adopte = s["resultat"] == "adopté"
+    court, nature = titre_court(s["titre"])
+    lignes = [f"**{'✅ ADOPTÉ' if adopte else '❌ REJETÉ'} · {court}**"]
+    infos = [nature] if nature else []
     if s.get("pour") is not None:
-        chiffres = f" ({s['pour']} pour, {s['contre']} contre, {s['abstentions']} abst.)"
-    ligne = f"{icone} **{s['resultat'].capitalize()}**{chiffres} : {raccourcir(s['titre'])} [lien](<{lien}>)"
+        infos.append(f"{s['pour']} pour · {s['contre']} contre · {s.get('abstentions') or 0} abst.")
+    infos.append(f"[voir le scrutin](<{lien}>)")
+    lignes.append("-# " + " · ".join(infos))
     if s.get("groupes"):
         # Masqué derrière un spoiler Discord : il faut cliquer pour l'afficher
-        parts = []
-        for g in sorted(s["groupes"], key=lambda g: -g["membres"]):
-            v = " ".join(x for x in (f"✅{g['pour']}" if g["pour"] else "", f"❌{g['contre']}" if g["contre"] else "",
-                                     f"⚪{g['abstention']}" if g["abstention"] else "") if x) or "–"
-            parts.append(f"{g['groupe']} {v}")
-        ligne += "\n> ||🗳️ " + " · ".join(parts) + "||"
-    return ligne
+        groupes = sorted(s["groupes"], key=lambda g: -g["membres"])
+        for cle, libelle in (("pour", "✅ Pour"), ("contre", "❌ Contre"), ("abstention", "⚪ Abstention")):
+            liste = [f"{g['groupe']} {g[cle]}" for g in groupes if g[cle]]
+            if liste:
+                lignes.append(f"> ||{libelle} : " + " · ".join(liste) + "||")
+    return lignes
+
+
+def ligne_vote(s: dict, lien: str) -> str:
+    return "\n".join(lignes_vote(s, lien))
 
 
 def detail_nominatif(aujourd_hui: dt.date, votes: list[tuple[str, dict, str]]) -> str:
@@ -490,18 +527,22 @@ def bloc_votes(nom: str, votes: list[dict], lien_de) -> tuple[list[str], str]:
         return [], ""
     importants = [s for s in votes if est_important(s["titre"], s.get("type", ""))]
     autres = [s for s in votes if s not in importants]
-    lignes = [f"## 🏛️ {nom}"]
-    if importants:
-        lignes += [ligne_vote(s, lien_de(s)) for s in importants]
-    else:
-        lignes.append("_Aucun vote sur un texte entier ou une motion._")
+    lignes = [f"## {nom}"]
+    for s in importants:
+        lignes += lignes_vote(s, lien_de(s)) + [""]
+    if not importants:
+        lignes.append("_Pas de vote sur un texte entier ou une motion._")
     if autres:
         a = sum(s["resultat"] == "adopté" for s in autres)
-        r = len(autres) - a
-        lignes.append(f"➕ {len(autres)} autre{'s' * (len(autres) > 1)} scrutin{'s' * (len(autres) > 1)} "
-                      f"(amendements, articles) : {a} adopté{'s' * (a > 1)}, {r} rejeté{'s' * (r > 1)}.")
+        lignes.append(f"➕ {len(autres)} autre{'s' * (len(autres) > 1)} vote{'s' * (len(autres) > 1)} "
+                      f"(amendements, articles) : {a} ✅ · {len(autres) - a} ❌")
     faits = "\n".join(f"{nom} {s['date']} : {s['titre']} -> {s['resultat']}" for s in importants)
     return lignes, faits
+
+
+def titre_depot(titre: str) -> tuple[str, str]:
+    m = re.match(r"^(.*?)\s*-\s*texte(?: de la commission)? N°\s*(\d+)", titre)
+    return (m.group(1), f"n° {m.group(2)}") if m else (titre, "")
 
 
 def construire(aujourd_hui: dt.date, an: list[dict], senat: list[dict],
@@ -509,30 +550,38 @@ def construire(aujourd_hui: dt.date, an: list[dict], senat: list[dict],
     jours = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
     mois = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août",
             "septembre", "octobre", "novembre", "décembre"]
-    titre = f"# 🇫🇷 Point politique du {jours[aujourd_hui.weekday()]} {aujourd_hui.day} {mois[aujourd_hui.month - 1]}"
-    lignes, faits = [titre], []
+    titre = f"# 🏛️ Point politique · {jours[aujourd_hui.weekday()]} {aujourd_hui.day} {mois[aujourd_hui.month - 1]}"
+    lignes, faits = [titre, ""], []
 
-    l, f = bloc_votes("Assemblée nationale", an, lambda s: URL_AN_SCRUTIN.format(n=s["numero"]))
-    lignes += l; faits.append(f)
-    l, f = bloc_votes("Sénat", senat, lambda s: s["lien"])
-    lignes += l; faits.append(f)
+    l, f = bloc_votes("🟦 Assemblée nationale", an, lambda s: URL_AN_SCRUTIN.format(n=s["numero"]))
+    lignes += l + ([""] if l else []); faits.append(f)
+    l, f = bloc_votes("🟥 Sénat", senat, lambda s: s["lien"])
+    lignes += l + ([""] if l else []); faits.append(f)
 
     if lois:
-        lignes.append("## 📜 Panorama des lois (promulguées ou en cours)")
-        for it in lois:
-            genre = f" _({it['type']})_" if it["type"] else ""
-            lignes.append(f"• {raccourcir(it['titre'])}{genre} [fiche](<{it['lien']}>)")
+        lignes.append("## 📜 Lois promulguées ou en cours")
+        for it in sorted(lois, key=lambda it: not it["titre"].lower().startswith("loi ")):  # promulguées d'abord
+            if it["titre"].lower().startswith("loi "):
+                lignes.append(f"• 🟢 **Promulguée :** [{raccourcir(it['titre'], 140)}](<{it['lien']}>)")
+            else:
+                court, _ = titre_court(it["titre"])
+                genre = f" · _{it['type'].lower()}_" if it["type"] else ""
+                lignes.append(f"• [{court}](<{it['lien']}>){genre}")
             faits.append(f"Panorama des lois : {it['titre']} ({it['type']}) sujets : {it['sujets']}")
+        lignes.append("")
     if depots:
         lignes.append("## 📥 Nouveaux textes déposés au Sénat")
         for it in depots[:MAX_DEPOTS]:
-            genre = f" _({it['type']})_" if it["type"] else ""
-            lignes.append(f"• {raccourcir(it['titre'], 160)}{genre} [texte](<{it['lien']}>)")
+            nom, num = titre_depot(it["titre"])
+            genre = (it["type"] or "").replace("proposition de résolution", "résolution")
+            details = " ".join(x for x in (genre, num) if x)
+            lignes.append(f"• [{raccourcir(nom, 120)}](<{it['lien']}>)" + (f" · _{details}_" if details else ""))
         if len(depots) > MAX_DEPOTS:
             lignes.append(f"… et {len(depots) - MAX_DEPOTS} autres.")
+        lignes.append("")
 
-    if len(lignes) == 1:
-        lignes.append("Rien de nouveau publié depuis le dernier point (pas de séance ou week-end).")
+    if len(lignes) == 2:
+        lignes.append("Rien de nouveau depuis le dernier point (pas de séance ou week-end).")
     if erreurs:
         lignes.append("⚠️ Source(s) injoignable(s) aujourd'hui : " + ", ".join(erreurs) + ". Elles seront rattrapées au prochain envoi.")
     lignes.append("-# Sources officielles : data.assemblee-nationale.fr, senat.fr, vie-publique.fr (DILA).")
@@ -540,14 +589,22 @@ def construire(aujourd_hui: dt.date, an: list[dict], senat: list[dict],
 
 
 def decouper(texte: str, limite: int = 1900) -> list[str]:
-    morceaux, courant = [], ""
+    """Découpe pour Discord (2 000 caractères max) en coupant de préférence avant une section « ## »."""
+    blocs, courant = [], []
     for ligne in texte.split("\n"):
-        if len(courant) + len(ligne) + 1 > limite and courant:
-            morceaux.append(courant)
-            courant = ""
-        courant += ligne[:limite] + "\n"
-    if courant.strip():
-        morceaux.append(courant)
+        if ligne.startswith("## ") and courant:
+            blocs.append("\n".join(courant)); courant = []
+        courant.append(ligne)
+    blocs.append("\n".join(courant))
+    morceaux, actuel = [], ""
+    for bloc in blocs:
+        for ligne in ([bloc] if len(bloc) <= limite else bloc.split("\n")):
+            ligne = ligne[:limite]
+            if actuel and len(actuel) + len(ligne) + 1 > limite:
+                morceaux.append(actuel); actuel = ""
+            actuel += ligne + "\n"
+    if actuel.strip():
+        morceaux.append(actuel)
     return morceaux
 
 
@@ -658,8 +715,7 @@ def un_point(envoyer: bool) -> str:
     detail = detail_nominatif(aujourd_hui, [("Assemblée nationale", s, URL_AN_SCRUTIN.format(n=s["numero"])) for s in an_imp]
                               + [("Sénat", s, s["lien"]) for s in senat if s.get("groupes")])
     if detail:
-        texte = texte.replace("\n-# Sources", "\n📎 Qui a voté quoi : clique sur les cases noires pour voir le vote de chaque groupe, "
-                              "et ouvre le fichier joint pour les noms.\n-# Sources", 1)
+        texte = texte.replace("\n-# Sources", "\n📎 Cases noires = vote de chaque groupe · fichier joint = les noms.\n-# Sources", 1)
     contexte = resume_ia(faits)
     if contexte:
         texte = texte.replace("\n-# Sources", f"\n## 🧠 Contexte (résumé IA locale, à vérifier)\n{contexte}\n-# Sources", 1)

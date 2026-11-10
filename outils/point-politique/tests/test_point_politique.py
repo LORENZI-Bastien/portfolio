@@ -169,7 +169,7 @@ class Tests(unittest.TestCase):
         self.assertEqual(s["groupes"][0]["noms"]["pour"], ["Alice Martin", "Bruno Petit"])
         self.assertEqual(s["groupes"][1]["noms"]["contre"], ["(ancien député PA999)"])
         ligne = pp.ligne_vote(s, "https://x")
-        self.assertIn("||🗳️ AAA ✅2 ⚪1 · BBB ❌1||", ligne)
+        self.assertIn("> ||✅ Pour : AAA 2||\n> ||❌ Contre : BBB 1||\n> ||⚪ Abstention : AAA 1||", ligne)
 
     def test_detail_senat(self):
         d = pp.detail_senat_depuis_html(SENAT_DETAIL)
@@ -197,6 +197,17 @@ class Tests(unittest.TestCase):
         self.assertFalse(pp.est_important("l'amendement n° 939 de suppression de l'article 49 du projet de loi de finances pour 2027"))
         self.assertTrue(pp.est_important("la première partie du projet de loi de finances pour 2027 (première lecture)"))
         self.assertTrue(pp.est_important("la motion de censure déposée en application de l'article 49, alinéa 3"))
+
+    def test_titres_courts(self):
+        tc = pp.titre_court
+        self.assertEqual(tc("la première partie du projet de loi de finances pour 2027 (première lecture)."),
+                         ("Budget de l'État 2027", "Projet de loi · première partie"))
+        self.assertEqual(tc("sur l'ensemble du projet de loi relatif à la protection des enfants"),
+                         ("Protection des enfants", "Projet de loi · texte entier"))
+        self.assertEqual(tc("sur l'article unique constituant l'ensemble de la proposition de loi visant à la suppression des titres de séjour territorialisés à Mayotte")[0],
+                         "Suppression des titres de séjour territorialisés à Mayotte")
+        self.assertEqual(pp.titre_depot("Avenir d'Eurojust - texte N° 150"), ("Avenir d'Eurojust", "n° 150"))
+        self.assertEqual(pp.titre_depot("Moderniser le titre-restaurant - texte de la commission N° 142"), ("Moderniser le titre-restaurant", "n° 142"))
 
     def test_session(self):
         self.assertEqual(pp.session_parlementaire(dt.date(2026, 11, 7)), 2026)
@@ -233,13 +244,13 @@ class Tests(unittest.TestCase):
             fdt.now.return_value = aujourdhui
             texte = pp.un_point(envoyer=True)
             print("\n" + texte)
-            self.assertIn("Point politique du samedi 7 novembre", texte)
-            self.assertIn("❌ **Rejeté** (300 pour, 200 contre, 40 abst.) : l'ensemble du projet de loi de finances", texte)
-            self.assertIn("200 autres scrutins", texte)
+            self.assertIn("# 🏛️ Point politique · samedi 7 novembre", texte)
+            self.assertIn("**❌ REJETÉ · Budget de l'État 2027**\n-# Projet de loi · texte entier · 300 pour · 200 contre · 40 abst.", texte)
+            self.assertIn("➕ 200 autres votes (amendements, articles) : 67 ✅ · 133 ❌", texte)
             self.assertIn("Sénat", texte)
-            self.assertIn("||🗳️ AAA ✅2 ⚪1 · BBB ❌1||", texte)
-            self.assertIn("||🗳️ LR ❌123 · SER ✅62 · UNT ⚪15 · Non-inscrits ✅1 ❌2||", texte)
-            self.assertIn("✅ **Adopté** (157 pour, 186 contre, 0 abst.)", texte)
+            self.assertIn("> ||✅ Pour : AAA 2||", texte)
+            self.assertIn("> ||❌ Contre : LR 123 · Non-inscrits 2||", texte)
+            self.assertIn("157 pour · 186 contre · 0 abst.", texte)
             nom_fichier, detail = envoyes[0][1]
             print("\n----- " + nom_fichier + "\n" + detail)
             self.assertEqual(nom_fichier, "votes-2026-11-07.txt")
